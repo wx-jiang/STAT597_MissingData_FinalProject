@@ -77,7 +77,7 @@ reg_imp <- function(d, ncol_missing, covariate_data) {
   
   if (ncol_missing == 2) {
     # fit regression on the second last variable using complete column and covariates
-    lm_model = lm(d_with_covariate[, ncol(d) - 1] ~ .,
+    lm_model = lm(d_with_covariate[, ncol(d) - 1] ~ . + Type*Trial,
                   data = d_with_covariate[, -c(ncol(d) - 1, ncol(d))])
     
     # impute second last variable
@@ -91,13 +91,13 @@ reg_imp <- function(d, ncol_missing, covariate_data) {
     
   } else if (ncol_missing == 4) {
     # fit regression on the second last variable using complete column and covariates
-    lm_model1 = lm(d_with_covariate[, ncol(d) - 1] ~ .,
+    lm_model1 = lm(d_with_covariate[, ncol(d) - 1] ~ . + Type*Trial,
                    data = d_with_covariate[, -c(ncol(d) - c(0, 1, 2, 3))])
     # fit regression on the third last variable using complete column and covariates
-    lm_model2 = lm(d_with_covariate[, ncol(d) - 2] ~ .,
+    lm_model2 = lm(d_with_covariate[, ncol(d) - 2] ~ . + Type*Trial,
                    data = d_with_covariate[, -c(ncol(d) - c(0, 1, 2, 3))])
     # fit regression on the fourth last variable using complete column and covariates
-    lm_model3 = lm(d_with_covariate[, ncol(d) - 3] ~ .,
+    lm_model3 = lm(d_with_covariate[, ncol(d) - 3] ~ . + Type*Trial,
                    data = d_with_covariate[, -c(ncol(d) - c(0, 1, 2, 3))])
     
     # impute second last variable
@@ -115,34 +115,34 @@ reg_imp <- function(d, ncol_missing, covariate_data) {
     
   } else if (ncol_missing == 11) {
     # fit regression on the second last variable using complete column and covariates
-    lm_model1 = lm(d_with_covariate[, ncol(d) - 1] ~ .,
+    lm_model1 = lm(d_with_covariate[, ncol(d) - 1] ~ . + Type*Trial,
                    data = d_with_covariate[, -c(ncol(d) - c(0:10))])
     # fit regression on the third last variable using complete column and covariates
-    lm_model2 = lm(d_with_covariate[, ncol(d) - 2] ~ .,
+    lm_model2 = lm(d_with_covariate[, ncol(d) - 2] ~ . + Type*Trial,
                    data = d_with_covariate[, -c(ncol(d) - c(0:10))])
     # fit regression on the fourth last variable using complete column and covariates
-    lm_model3 = lm(d_with_covariate[, ncol(d) - 3] ~ .,
+    lm_model3 = lm(d_with_covariate[, ncol(d) - 3] ~ . + Type*Trial,
                    data = d_with_covariate[, -c(ncol(d) - c(0:10))])
     # fit regression on the fifth last variable using complete column and covariates
-    lm_model4 = lm(d_with_covariate[, ncol(d) - 4] ~ .,
+    lm_model4 = lm(d_with_covariate[, ncol(d) - 4] ~ . + Type*Trial,
                    data = d_with_covariate[, -c(ncol(d) - c(0:10))])
     # fit regression on the sixth last variable using complete column and covariates
-    lm_model5 = lm(d_with_covariate[, ncol(d) - 5] ~ .,
+    lm_model5 = lm(d_with_covariate[, ncol(d) - 5] ~ . + Type*Trial,
                    data = d_with_covariate[, -c(ncol(d) - c(0:10))])
     # fit regression on the seventh last variable using complete column and covariates
-    lm_model6 = lm(d_with_covariate[, ncol(d) - 6] ~ .,
+    lm_model6 = lm(d_with_covariate[, ncol(d) - 6] ~ . + Type*Trial,
                    data = d_with_covariate[, -c(ncol(d) - c(0:10))])
     # fit regression on the eighth last variable using complete column and covariates
-    lm_model7 = lm(d_with_covariate[, ncol(d) - 7] ~ .,
+    lm_model7 = lm(d_with_covariate[, ncol(d) - 7] ~ . + Type*Trial,
                    data = d_with_covariate[, -c(ncol(d) - c(0:10))])
     # fit regression on the nineth last variable using complete column and covariates
-    lm_model8 = lm(d_with_covariate[, ncol(d) - 8] ~ .,
+    lm_model8 = lm(d_with_covariate[, ncol(d) - 8] ~ . + Type*Trial,
                    data = d_with_covariate[, -c(ncol(d) - c(0:10))])
     # fit regression on the tenth last variable using complete column and covariates
-    lm_model9 = lm(d_with_covariate[, ncol(d) - 9] ~ .,
+    lm_model9 = lm(d_with_covariate[, ncol(d) - 9] ~ . + Type*Trial,
                    data = d_with_covariate[, -c(ncol(d) - c(0:10))])
     # fit regression on the eleventh last variable using complete column and covariates
-    lm_model10 = lm(d_with_covariate[, ncol(d) - 10] ~ .,
+    lm_model10 = lm(d_with_covariate[, ncol(d) - 10] ~ . + Type*Trial,
                     data = d_with_covariate[, -c(ncol(d) - c(0:10))])
     
     # impute second last variable
@@ -239,7 +239,7 @@ dirichlet_reg_imp <- function(d, n_archtype, covariate_data) {
     # impute
     d[!complete_idx, ] = predict(dirichelet_model, 
                                  newdata = d_with_covariate[!complete_idx,])
-    
+      
     # fix the issue that observed data is changed in prediction
     residual = 1 - (observed_data[!complete_idx,])
     d[!complete_idx, 2:3] = (d[!complete_idx, 2:3] / rowSums(d[!complete_idx, 2:3])) * residual
