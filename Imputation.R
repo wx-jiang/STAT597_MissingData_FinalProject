@@ -73,15 +73,15 @@ nrow(MetaData)
 reg_imp <- function(d, ncol_missing, covariate_data) {
   d_with_covariate = cbind(d, covariate_data)
   complete_idx = complete.cases(d_with_covariate)
-  d_with_covariate_complete = d_with_covariate[complete_idx,]
+  # d_with_covariate_complete = d_with_covariate[complete_idx,]
   
   if (ncol_missing == 2) {
     # fit regression on the second last variable using complete column and covariates
-    lm_model = lm(d_with_covariate_complete[, ncol(d) - 1] ~ .,
-                  data = d_with_covariate_complete[, -c(ncol(d) - 1, ncol(d))])
+    lm_model = lm(d_with_covariate[, ncol(d) - 1] ~ .,
+                  data = d_with_covariate[, -c(ncol(d) - 1, ncol(d))])
     
     # impute second last variable
-    d[!complete_idx, ncol(d) - 1] = predict.lm(lm_model, newdata = d_with_covariate_complete[!complete_idx, -c(ncol(d) - 1, ncol(d))])
+    d[!complete_idx, ncol(d) - 1] = predict.lm(lm_model, newdata = d_with_covariate[!complete_idx, -c(ncol(d) - 1, ncol(d))])
     # impute last column
     d[!complete_idx, ncol(d)] = 1 - rowSums(d[!complete_idx, ], na.rm = T)
     # fix the issue that the row sum might go above 1
@@ -91,21 +91,21 @@ reg_imp <- function(d, ncol_missing, covariate_data) {
     
   } else if (ncol_missing == 4) {
     # fit regression on the second last variable using complete column and covariates
-    lm_model1 = lm(d_with_covariate_complete[, ncol(d) - 1] ~ .,
-                   data = d_with_covariate_complete[, -c(ncol(d) - c(0, 1, 2, 3))])
+    lm_model1 = lm(d_with_covariate[, ncol(d) - 1] ~ .,
+                   data = d_with_covariate[, -c(ncol(d) - c(0, 1, 2, 3))])
     # fit regression on the third last variable using complete column and covariates
-    lm_model2 = lm(d_with_covariate_complete[, ncol(d) - 2] ~ .,
-                   data = d_with_covariate_complete[, -c(ncol(d) - c(0, 1, 2, 3))])
+    lm_model2 = lm(d_with_covariate[, ncol(d) - 2] ~ .,
+                   data = d_with_covariate[, -c(ncol(d) - c(0, 1, 2, 3))])
     # fit regression on the fourth last variable using complete column and covariates
-    lm_model3 = lm(d_with_covariate_complete[, ncol(d) - 3] ~ .,
-                   data = d_with_covariate_complete[, -c(ncol(d) - c(0, 1, 2, 3))])
+    lm_model3 = lm(d_with_covariate[, ncol(d) - 3] ~ .,
+                   data = d_with_covariate[, -c(ncol(d) - c(0, 1, 2, 3))])
     
     # impute second last variable
-    d[!complete_idx, ncol(d) - 1] = predict.lm(lm_model1, newdata = d_with_covariate_complete[!complete_idx, -c(ncol(d) - c(0, 1, 2, 3))])
+    d[!complete_idx, ncol(d) - 1] = predict.lm(lm_model1, newdata = d_with_covariate[!complete_idx, -c(ncol(d) - c(0, 1, 2, 3))])
     # impute third last variable
-    d[!complete_idx, ncol(d) - 2] = predict.lm(lm_model2, newdata = d_with_covariate_complete[!complete_idx, -c(ncol(d) - c(0, 1, 2, 3))])
+    d[!complete_idx, ncol(d) - 2] = predict.lm(lm_model2, newdata = d_with_covariate[!complete_idx, -c(ncol(d) - c(0, 1, 2, 3))])
     # impute fourth last variable
-    d[!complete_idx, ncol(d) - 3] = predict.lm(lm_model3, newdata = d_with_covariate_complete[!complete_idx, -c(ncol(d) - c(0, 1, 2, 3))])
+    d[!complete_idx, ncol(d) - 3] = predict.lm(lm_model3, newdata = d_with_covariate[!complete_idx, -c(ncol(d) - c(0, 1, 2, 3))])
     # impute last column
     d[!complete_idx, ncol(d)] = 1 - rowSums(d[!complete_idx, ], na.rm = T)
     # fix the issue that the row sum might go above 1
@@ -115,56 +115,56 @@ reg_imp <- function(d, ncol_missing, covariate_data) {
     
   } else if (ncol_missing == 11) {
     # fit regression on the second last variable using complete column and covariates
-    lm_model1 = lm(d_with_covariate_complete[, ncol(d) - 1] ~ .,
-                   data = d_with_covariate_complete[, -c(ncol(d) - c(0:10))])
+    lm_model1 = lm(d_with_covariate[, ncol(d) - 1] ~ .,
+                   data = d_with_covariate[, -c(ncol(d) - c(0:10))])
     # fit regression on the third last variable using complete column and covariates
-    lm_model2 = lm(d_with_covariate_complete[, ncol(d) - 2] ~ .,
-                   data = d_with_covariate_complete[, -c(ncol(d) - c(0:10))])
+    lm_model2 = lm(d_with_covariate[, ncol(d) - 2] ~ .,
+                   data = d_with_covariate[, -c(ncol(d) - c(0:10))])
     # fit regression on the fourth last variable using complete column and covariates
-    lm_model3 = lm(d_with_covariate_complete[, ncol(d) - 3] ~ .,
-                   data = d_with_covariate_complete[, -c(ncol(d) - c(0:10))])
+    lm_model3 = lm(d_with_covariate[, ncol(d) - 3] ~ .,
+                   data = d_with_covariate[, -c(ncol(d) - c(0:10))])
     # fit regression on the fifth last variable using complete column and covariates
-    lm_model4 = lm(d_with_covariate_complete[, ncol(d) - 4] ~ .,
-                   data = d_with_covariate_complete[, -c(ncol(d) - c(0:10))])
+    lm_model4 = lm(d_with_covariate[, ncol(d) - 4] ~ .,
+                   data = d_with_covariate[, -c(ncol(d) - c(0:10))])
     # fit regression on the sixth last variable using complete column and covariates
-    lm_model5 = lm(d_with_covariate_complete[, ncol(d) - 5] ~ .,
-                   data = d_with_covariate_complete[, -c(ncol(d) - c(0:10))])
+    lm_model5 = lm(d_with_covariate[, ncol(d) - 5] ~ .,
+                   data = d_with_covariate[, -c(ncol(d) - c(0:10))])
     # fit regression on the seventh last variable using complete column and covariates
-    lm_model6 = lm(d_with_covariate_complete[, ncol(d) - 6] ~ .,
-                   data = d_with_covariate_complete[, -c(ncol(d) - c(0:10))])
+    lm_model6 = lm(d_with_covariate[, ncol(d) - 6] ~ .,
+                   data = d_with_covariate[, -c(ncol(d) - c(0:10))])
     # fit regression on the eighth last variable using complete column and covariates
-    lm_model7 = lm(d_with_covariate_complete[, ncol(d) - 7] ~ .,
-                   data = d_with_covariate_complete[, -c(ncol(d) - c(0:10))])
+    lm_model7 = lm(d_with_covariate[, ncol(d) - 7] ~ .,
+                   data = d_with_covariate[, -c(ncol(d) - c(0:10))])
     # fit regression on the nineth last variable using complete column and covariates
-    lm_model8 = lm(d_with_covariate_complete[, ncol(d) - 8] ~ .,
-                   data = d_with_covariate_complete[, -c(ncol(d) - c(0:10))])
+    lm_model8 = lm(d_with_covariate[, ncol(d) - 8] ~ .,
+                   data = d_with_covariate[, -c(ncol(d) - c(0:10))])
     # fit regression on the tenth last variable using complete column and covariates
-    lm_model9 = lm(d_with_covariate_complete[, ncol(d) - 9] ~ .,
-                   data = d_with_covariate_complete[, -c(ncol(d) - c(0:10))])
+    lm_model9 = lm(d_with_covariate[, ncol(d) - 9] ~ .,
+                   data = d_with_covariate[, -c(ncol(d) - c(0:10))])
     # fit regression on the eleventh last variable using complete column and covariates
-    lm_model10 = lm(d_with_covariate_complete[, ncol(d) - 10] ~ .,
-                    data = d_with_covariate_complete[, -c(ncol(d) - c(0:10))])
+    lm_model10 = lm(d_with_covariate[, ncol(d) - 10] ~ .,
+                    data = d_with_covariate[, -c(ncol(d) - c(0:10))])
     
     # impute second last variable
-    d[!complete_idx, ncol(d) - 1] = predict.lm(lm_model1, newdata = d_with_covariate_complete[!complete_idx, -c(ncol(d) - c(0:10))])
+    d[!complete_idx, ncol(d) - 1] = predict.lm(lm_model1, newdata = d_with_covariate[!complete_idx, -c(ncol(d) - c(0:10))])
     # impute third last variable
-    d[!complete_idx, ncol(d) - 2] = predict.lm(lm_model2, newdata = d_with_covariate_complete[!complete_idx, -c(ncol(d) - c(0:10))])
+    d[!complete_idx, ncol(d) - 2] = predict.lm(lm_model2, newdata = d_with_covariate[!complete_idx, -c(ncol(d) - c(0:10))])
     # impute fourth last variable
-    d[!complete_idx, ncol(d) - 3] = predict.lm(lm_model3, newdata = d_with_covariate_complete[!complete_idx, -c(ncol(d) - c(0:10))])
+    d[!complete_idx, ncol(d) - 3] = predict.lm(lm_model3, newdata = d_with_covariate[!complete_idx, -c(ncol(d) - c(0:10))])
     # impute 5 last variable
-    d[!complete_idx, ncol(d) - 4] = predict.lm(lm_model4, newdata = d_with_covariate_complete[!complete_idx, -c(ncol(d) - c(0:10))])
+    d[!complete_idx, ncol(d) - 4] = predict.lm(lm_model4, newdata = d_with_covariate[!complete_idx, -c(ncol(d) - c(0:10))])
     # impute 6 last variable
-    d[!complete_idx, ncol(d) - 5] = predict.lm(lm_model5, newdata = d_with_covariate_complete[!complete_idx, -c(ncol(d) - c(0:10))])
+    d[!complete_idx, ncol(d) - 5] = predict.lm(lm_model5, newdata = d_with_covariate[!complete_idx, -c(ncol(d) - c(0:10))])
     # impute 7 last variable
-    d[!complete_idx, ncol(d) - 6] = predict.lm(lm_model6, newdata = d_with_covariate_complete[!complete_idx, -c(ncol(d) - c(0:10))])
+    d[!complete_idx, ncol(d) - 6] = predict.lm(lm_model6, newdata = d_with_covariate[!complete_idx, -c(ncol(d) - c(0:10))])
     # impute 8 last variable
-    d[!complete_idx, ncol(d) - 7] = predict.lm(lm_model7, newdata = d_with_covariate_complete[!complete_idx, -c(ncol(d) - c(0:10))])
+    d[!complete_idx, ncol(d) - 7] = predict.lm(lm_model7, newdata = d_with_covariate[!complete_idx, -c(ncol(d) - c(0:10))])
     # impute 9 last variable
-    d[!complete_idx, ncol(d) - 8] = predict.lm(lm_model8, newdata = d_with_covariate_complete[!complete_idx, -c(ncol(d) - c(0:10))])
+    d[!complete_idx, ncol(d) - 8] = predict.lm(lm_model8, newdata = d_with_covariate[!complete_idx, -c(ncol(d) - c(0:10))])
     # impute 10 last variable
-    d[!complete_idx, ncol(d) - 9] = predict.lm(lm_model9, newdata = d_with_covariate_complete[!complete_idx, -c(ncol(d) - c(0:10))])
+    d[!complete_idx, ncol(d) - 9] = predict.lm(lm_model9, newdata = d_with_covariate[!complete_idx, -c(ncol(d) - c(0:10))])
     # impute 11 last variable
-    d[!complete_idx, ncol(d) - 10] = predict.lm(lm_model10, newdata = d_with_covariate_complete[!complete_idx, -c(ncol(d) - c(0:10))])
+    d[!complete_idx, ncol(d) - 10] = predict.lm(lm_model10, newdata = d_with_covariate[!complete_idx, -c(ncol(d) - c(0:10))])
     # impute last column
     d[!complete_idx, ncol(d)] = 1 - rowSums(d[!complete_idx, ], na.rm = T)
     # fix the issue that the row sum might go above 1
@@ -188,9 +188,11 @@ names(arch3_Regression_Imp)
 # can be accessed by names
 arch6_Regression_Imp = lapply(
   mget(paste0("arch6mis", c(rep(2, 3), rep(4, 3)), "pct", c(10, 30, 90))),
-  function(X) ifelse(sum(colSums(is.na(arch6mis4pct10)) != 0) == 4, # number of missing columns
-                     reg_imp(X, 4, MetaData), 
-                     reg_imp(X, 2, MetaData))
+  function(X) {
+    if (sum(colSums(is.na(X)) != 0) == 4) {
+      reg_imp(X, 4, MetaData)
+    } else {reg_imp(X, 2, MetaData)}
+  }
 )
 
 names(arch6_Regression_Imp)
@@ -199,11 +201,11 @@ names(arch6_Regression_Imp)
 # can be accessed by names
 arch12_Regression_Imp = lapply(
   mget(paste0("arch12mis", c(rep(2, 3), rep(4, 3), rep(11, 3)), "pct", c(10, 30, 90))), {
-    function(X) if (sum(colSums(is.na(arch6mis4pct10)) != 0) == 11) { # number of missing columns
+    function(X) if (sum(colSums(is.na(X)) != 0) == 11) { # number of missing columns
       reg_imp(X, 11, MetaData)
-    } else if (sum(colSums(is.na(arch6mis4pct10)) != 0) == 4) {
+    } else if (sum(colSums(is.na(X)) != 0) == 4) {
       reg_imp(X, 4, MetaData)
-    } else if (sum(colSums(is.na(arch6mis4pct10)) != 0) == 2) {
+    } else if (sum(colSums(is.na(X)) != 0) == 2) {
       reg_imp(X, 2, MetaData)
     }
   }
@@ -215,7 +217,7 @@ names(arch12_Regression_Imp)
 save(list = c("arch3_Regression_Imp", "arch6_Regression_Imp", "arch12_Regression_Imp"), 
      file = "imputed_data/Linear_regression_Imp_data.RData")
 
-# load("imputed_data/Regression_Imp_data.RData")
+# load("imputed_data/Linear_regression_Imp_data.RData")
 
 
 #### Dirichlet Regression Imputation using DirichletReg R Package -----
@@ -387,7 +389,7 @@ names(arch12_Dirichlet_Imp)
 save(list = c("arch3_Dirichlet_Imp", "arch6_Dirichlet_Imp", "arch12_Dirichlet_Imp"), 
      file = "imputed_data/Dirichlet_regression_Imp_data.RData")
 
-# load("imputed_data/Nonpara_Imp_data.RData")
+# load("imputed_data/Dirichlet_regression_Imp_data.RData")
 
 
 #### Multiple imputation ----
